@@ -402,7 +402,8 @@
       color: var(--text-primary);
     }
 
-    .radio-label:has(input:checked) {
+    .radio-label:has(input:checked),
+    .radio-label.checked {
       border-color: var(--primary);
       background: rgba(99,102,241,0.15);
       color: var(--text-primary);
@@ -533,6 +534,16 @@
 
     .preset-item:hover .preset-color-dot {
       transform: scale(1.1);
+    }
+
+    .preset-item:focus {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .preset-item:focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
     }
 
     .current-preset {
@@ -911,11 +922,51 @@
       .sidebar.open {
         left: 0;
       }
+
+      .mobile-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        border: none;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        margin-right: 12px;
+      }
+
+      .mobile-menu-btn svg {
+        width: 20px;
+        height: 20px;
+        stroke: white;
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.5);
+        z-index: 99;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+    }
+
+    @media (min-width: 769px) {
+      .mobile-menu-btn {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Mobile overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeMobileSidebar()"></div>
+
     <!-- 左侧设置面板 -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
@@ -1151,6 +1202,11 @@
     <main class="main-panel">
       <header class="header">
         <div class="header-brand">
+          <button class="mobile-menu-btn" onclick="openMobileSidebar()" aria-label="打开菜单">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round">
+              <path d="M4 6h16M4 12h16M4 18h16"/>
+            </svg>
+          </button>
           <div class="header-logo">
             <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
               <path d="M4 6h16M4 12h10M4 18h13"/>
@@ -1201,7 +1257,7 @@
     </main>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <div class="toast" id="toast" role="alert" aria-live="polite" aria-atomic="true"></div>
 
   <script>
     // 配色方案预设 - 10 套高区分度配色
@@ -1258,7 +1314,7 @@
         name: '暗夜霓虹',
         desc: '赛博朋克风格，霓虹亮色，科技感十足',
         h1Color: '#FF00FF', h2Color: '#00FFFF', h3Color: '#FF6EC7',
-        boldColor: '#39FF14', textColor: '#2D2D2D', linkColor: '#FF4081'
+        boldColor: '#39FF14', textColor: '#1A1A1A', linkColor: '#FF4081'
       },
       {
         name: '复古咖啡',
@@ -1331,17 +1387,30 @@
       const grid = document.getElementById('preset-grid');
       grid.innerHTML = COLOR_PRESETS.map(preset => `
         <div class="preset-item ${currentPreset === preset.name ? 'active' : ''}"
-             onclick="applyPreset('${preset.name}')">
+             onclick="applyPreset('${preset.name}')"
+             onkeydown="handlePresetKeydown(event, '${preset.name}')"
+             tabindex="0"
+             role="button"
+             aria-label="${preset.name}配色方案"
+             aria-pressed="${currentPreset === preset.name}">
           <div class="preset-name">${preset.name}</div>
           <div class="preset-colors">
-            <div class="preset-color-dot" style="background:${preset.h1Color};"></div>
-            <div class="preset-color-dot" style="background:${preset.h2Color};"></div>
-            <div class="preset-color-dot" style="background:${preset.boldColor};"></div>
-            <div class="preset-color-dot" style="background:${preset.textColor};"></div>
+            <div class="preset-color-dot" style="background:${preset.h1Color};" aria-hidden="true"></div>
+            <div class="preset-color-dot" style="background:${preset.h2Color};" aria-hidden="true"></div>
+            <div class="preset-color-dot" style="background:${preset.boldColor};" aria-hidden="true"></div>
+            <div class="preset-color-dot" style="background:${preset.textColor};" aria-hidden="true"></div>
           </div>
         </div>
       `).join('');
       document.getElementById('current-preset').textContent = `当前：${currentPreset}`;
+    }
+
+    // Handle keyboard navigation for preset items
+    function handlePresetKeydown(event, presetName) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        applyPreset(presetName);
+      }
     }
 
     // 应用配色预设
@@ -1463,6 +1532,8 @@
           features.ulStyle = e.target.value;
           const customInput = document.getElementById('ul-custom-marker');
           customInput.style.display = e.target.value === 'custom' ? 'block' : 'none';
+          // Firefox fallback for :has() selector
+          updateRadioLabelStyles('ul-style');
           convert();
           saveSettings();
         });
@@ -1479,9 +1550,25 @@
       document.querySelectorAll('input[name="ol-style"]').forEach(radio => {
         radio.addEventListener('change', (e) => {
           features.olStyle = e.target.value;
+          // Firefox fallback for :has() selector
+          updateRadioLabelStyles('ol-style');
           convert();
           saveSettings();
         });
+      });
+
+      // Initialize radio label styles (Firefox fallback)
+      updateRadioLabelStyles('ul-style');
+      updateRadioLabelStyles('ol-style');
+    }
+
+    // Firefox fallback for :has() selector on radio labels
+    function updateRadioLabelStyles(name) {
+      document.querySelectorAll(`input[name="${name}"]`).forEach(radio => {
+        const label = radio.closest('.radio-label');
+        if (label) {
+          label.classList.toggle('checked', radio.checked);
+        }
       });
     }
 
@@ -1495,6 +1582,19 @@
     // 侧边栏折叠
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    // Mobile sidebar functions
+    function openMobileSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebar-overlay').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.remove('show');
+      document.body.style.overflow = '';
     }
 
     // 拖拽设置
@@ -1617,9 +1717,13 @@
       html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>');
       html = html.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
 
-      // 8. 处理链接
-      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
-        `<a href="$2" style="color:${CONFIG.linkColor}; text-decoration:none;">$1</a>`);
+      // 8. 处理链接 (with XSS protection)
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
+        // Block dangerous protocols
+        const sanitizedUrl = sanitizeUrl(url);
+        if (!sanitizedUrl) return text; // Return plain text if URL is unsafe
+        return `<a href="${sanitizedUrl}" style="color:${CONFIG.linkColor}; text-decoration:none;">${text}</a>`;
+      });
 
       // 9. 处理无序列表
       const ulMarkers = {
@@ -1755,6 +1859,31 @@
         .replace(/>/g, '&gt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
+    }
+
+    // URL sanitization to prevent XSS attacks
+    function sanitizeUrl(url) {
+      if (!url) return null;
+      const trimmedUrl = url.trim().toLowerCase();
+      // Block dangerous protocols
+      const dangerousProtocols = ['javascript:', 'data:', 'vbscript:', 'file:'];
+      for (const protocol of dangerousProtocols) {
+        if (trimmedUrl.startsWith(protocol)) {
+          console.warn('Blocked dangerous URL:', url);
+          return null;
+        }
+      }
+      // Allow safe protocols and relative URLs
+      const safeProtocols = ['http:', 'https:', 'mailto:', 'tel:', '#', '/'];
+      const hasProtocol = /^[a-z][a-z0-9+.-]*:/i.test(url);
+      if (hasProtocol) {
+        const isSafe = safeProtocols.some(p => trimmedUrl.startsWith(p));
+        if (!isSafe) {
+          console.warn('Blocked unknown protocol:', url);
+          return null;
+        }
+      }
+      return url;
     }
 
     function updateStats(markdown) {

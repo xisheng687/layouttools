@@ -26,26 +26,21 @@ We love new ideas! Please open an issue with:
 
 1. **Fork the repository** and create your branch from `main`
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Make your changes**
+2. **Make your changes**
    - Write clear, readable code
    - Follow the existing code style
    - Add comments where necessary
 
-4. **Test your changes**
-   ```bash
-   npm run test
-   ```
+3. **Test your changes**
+   - Open `index.html` in your browser
+   - Test various Markdown inputs and color schemes
+   - Test on different browsers if possible
 
-5. **Commit your changes**
+4. **Commit your changes**
    - Use clear and meaningful commit messages
    - Reference any related issues
 
-6. **Push to your fork** and submit a pull request
+5. **Push to your fork** and submit a pull request
 
 ### Code Style
 
@@ -63,18 +58,33 @@ We love new ideas! Please open an issue with:
 
 ## Development Setup
 
+This is a pure static project with no build dependencies.
+
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/wepub.git
+git clone https://github.com/YOUR_USERNAME/layouttools.git
 
 # Navigate to the project
-cd wepub
+cd layouttools
 
-# Install dependencies
-npm install
+# Open directly in browser
+open index.html
 
-# Start development server
-npm run dev
+# Or use a local server (optional)
+python3 -m http.server 8080
+# Then visit http://localhost:8080
+```
+
+### CLI Tool
+
+The project includes a Node.js CLI tool that can be run directly:
+
+```bash
+# Basic conversion
+node format-wechat.js your-article.md
+
+# With preview
+node format-wechat.js your-article.md --preview
 ```
 
 ## Questions?

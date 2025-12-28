@@ -477,16 +477,28 @@ function main() {
     const htmlContent = convertMarkdownToWechat(markdown);
     const finalHtml = isPreview ? wrapFullHtml(htmlContent, markdown) : htmlContent;
     const htmlFile = path.join(dirName, `${baseName}_wechat.html`);
-    fs.writeFileSync(htmlFile, finalHtml, 'utf-8');
-    console.log(`✅ HTML 输出: ${htmlFile}`);
+    try {
+      fs.writeFileSync(htmlFile, finalHtml, 'utf-8');
+      console.log(`✅ HTML 输出: ${htmlFile}`);
+    } catch (err) {
+      console.error(`❌ 错误: 无法写入文件 ${htmlFile}`);
+      console.error(`   原因: ${err.message}`);
+      process.exit(1);
+    }
   }
 
   // 输出格式化的 MD
   if (!htmlOnly) {
     const formattedMd = formatMarkdown(markdown);
     const mdFile = path.join(dirName, `${baseName}_formatted.md`);
-    fs.writeFileSync(mdFile, formattedMd, 'utf-8');
-    console.log(`✅ MD 输出: ${mdFile}`);
+    try {
+      fs.writeFileSync(mdFile, formattedMd, 'utf-8');
+      console.log(`✅ MD 输出: ${mdFile}`);
+    } catch (err) {
+      console.error(`❌ 错误: 无法写入文件 ${mdFile}`);
+      console.error(`   原因: ${err.message}`);
+      process.exit(1);
+    }
   }
 
   console.log('');
