@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WePub - 微信公众号排版工具 | 专业文章排版神器</title>
+
+  <!-- SEO Meta Tags -->
+  <meta name="description" content="WePub 是一款专业的微信公众号排版工具，支持 Markdown 转换、10 套高区分度配色方案、实时预览编辑。一键复制，让你的公众号文章更专业、更美观。">
+  <meta name="keywords" content="微信公众号排版,Markdown转换,公众号编辑器,文章排版工具,WeChat排版,WePub">
+  <meta name="author" content="WePub">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://wepub.app/">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://wepub.app/">
+  <meta property="og:title" content="WePub - 微信公众号排版工具">
+  <meta property="og:description" content="专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览。让你的公众号文章更专业。">
+  <meta property="og:image" content="https://wepub.app/og-image.png">
+  <meta property="og:locale" content="zh_CN">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WePub - 微信公众号排版工具">
+  <meta name="twitter:description" content="专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览。">
+  <meta name="twitter:image" content="https://wepub.app/og-image.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1'/%3E%3Cstop offset='100%25' style='stop-color:%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 10h16M8 16h12M8 22h14' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "WePub",
+    "description": "专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览编辑",
+    "url": "https://wepub.app",
+    "applicationCategory": "UtilitiesApplication",
+    "operatingSystem": "Web Browser",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "CNY"
+    },
+    "featureList": [
+      "Markdown 转 HTML",
+      "10 套高区分度配色方案",
+      "实时预览编辑",
+      "一键复制到微信",
+      "自定义字符替换"
+    ]
+  }
+  </script>
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #6366f1;
+      --primary-dark: #4f46e5;
+      --accent: #a855f7;
+      --bg-dark: #0f0f14;
+      --bg-sidebar: #18181f;
+      --bg-card: #1f1f28;
+      --bg-hover: #2a2a35;
+      --bg-main: #fafbfc;
+      --text-primary: #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --border-color: #27272a;
+      --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+      --gradient-glow: linear-gradient(135deg, rgba(99,102,241,0.15) 0%, rgba(168,85,247,0.15) 100%);
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.1);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.15);
+      --shadow-lg: 0 8px 30px rgba(0,0,0,0.2);
+      --shadow-glow: 0 0 40px rgba(99,102,241,0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg-main);
+      height: 100vh;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* 左侧设置面板 - Apple 风格深色 */
+    .sidebar {
+      width: 320px;
+      background: var(--bg-sidebar);
+      color: var(--text-primary);
+      overflow-y: auto;
+      transition: var(--transition);
+      flex-shrink: 0;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+      border-radius: 3px;
+    }
+
+    .sidebar.collapsed {
+      width: 56px;
+    }
+
+    .sidebar.collapsed .sidebar-content {
+      display: none;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      background: var(--bg-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-sm);
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .sidebar-logo svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .sidebar-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar.collapsed .sidebar-brand .sidebar-title {
+      display: none;
+    }
+
+    .sidebar-toggle {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .sidebar-content {
+      padding: 20px;
+    }
+
+    /* 统计面板 */
+    .stats-panel {
+      background: var(--gradient-glow);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 700;
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* 可折叠设置组 */
+    .setting-group {
+      margin-bottom: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .setting-group:hover {
+      border-color: #3f3f46;
+    }
+
+    .setting-group-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      transition: var(--transition);
+    }
+
+    .setting-group-header:hover {
+      background: var(--bg-hover);
+    }
+
+    .setting-group-title {
+      font-size: 13px;
+      color: var(--text-primary);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .setting-group-toggle {
+      color: var(--text-muted);
+      font-size: 10px;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .setting-group.collapsed .setting-group-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .setting-group-content {
+      padding: 0 16px 16px;
+      display: block;
+    }
+
+    .setting-group.collapsed .setting-group-content {
+      display: none;
+    }
+
+    .setting-item {
+      margin-bottom: 14px;
+    }
+
+    .setting-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .setting-label {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 500;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .color-input {
+      width: 40px;
+      height: 32px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      padding: 2px;
+      background: transparent;
+      transition: var(--transition);
+    }
+
+    .color-input:hover {
+      border-color: var(--primary);
+    }
+
+    .text-input {
+      flex: 1;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 10px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+
+    .text-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+    }
+
+    .text-input.small {
+      width: 70px;
+      flex: none;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .checkbox-label:hover {
+      color: var(--text-primary);
+    }
+
+    .checkbox-label input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+    }
+
+    /* 列表样式选项 */
+    .list-style-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .radio-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 6px 10px;
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .radio-label:hover {
+      border-color: var(--primary);
+      color: var(--text-primary);
+    }
+
+    .radio-label:has(input:checked) {
+      border-color: var(--primary);
+      background: rgba(99,102,241,0.15);
+      color: var(--text-primary);
+    }
+
+    .radio-label input {
+      display: none;
+    }
+
+    /* 替换规则 */
+    .replace-list {
+      background: var(--bg-dark);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .replace-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .replace-item:last-child {
+      border-bottom: none;
+    }
+
+    .replace-from, .replace-to {
+      background: var(--bg-hover);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      font-size: 12px;
+    }
+
+    .replace-arrow {
+      color: var(--text-muted);
+    }
+
+    .replace-delete {
+      margin-left: auto;
+      background: none;
+      border: none;
+      color: #ef4444;
+      cursor: pointer;
+      padding: 4px 6px;
+      font-size: 11px;
+      border-radius: 4px;
+      transition: var(--transition);
+    }
+
+    .replace-delete:hover {
+      background: rgba(239,68,68,0.15);
+    }
+
+    .add-replace-btn {
+      background: transparent;
+      border: 1px dashed var(--border-color);
+      color: var(--text-muted);
+      padding: 10px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 12px;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .add-replace-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: var(--primary);
+    }
+
+    /* 配色方案预设 */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .preset-item {
+      background: var(--bg-dark);
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .preset-item:hover {
+      background: var(--bg-hover);
+      border-color: #3f3f46;
+      transform: translateY(-1px);
+    }
+
+    .preset-item.active {
+      border-color: var(--primary);
+      background: rgba(99,102,241,0.1);
+      box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+    }
+
+    .preset-name {
+      font-size: 11px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .preset-colors {
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .preset-color-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.1);
+      transition: var(--transition);
+    }
+
+    .preset-item:hover .preset-color-dot {
+      transform: scale(1.1);
+    }
+
+    .current-preset {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      padding: 8px;
+      background: var(--bg-dark);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+    }
+
+    .reset-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      width: 100%;
+      font-size: 13px;
+      font-weight: 500;
+      margin-top: 20px;
+      transition: var(--transition);
+    }
+
+    .reset-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+      border-color: #3f3f46;
+    }
+
+    .guide-link {
+      display: block;
+      text-align: center;
+      padding: 12px;
+      margin-top: 12px;
+      color: var(--primary);
+      font-size: 13px;
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .guide-link:hover {
+      background: rgba(99,102,241,0.1);
+    }
+
+    /* 主内容区 */
+    .main-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+
+    .header {
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      background: var(--gradient-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-md), var(--shadow-glow);
+    }
+
+    .header-logo svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #18181b;
+      letter-spacing: -0.02em;
+    }
+
+    .header-tagline {
+      font-size: 13px;
+      color: #71717a;
+      margin-top: 2px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--gradient-primary);
+      color: white;
+      box-shadow: var(--shadow-sm), 0 0 20px rgba(99,102,241,0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md), 0 0 30px rgba(99,102,241,0.4);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-success:hover {
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md), 0 0 20px rgba(16,185,129,0.3);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #3f3f46;
+      border: 1px solid #e4e4e7;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-secondary:hover {
+      background: #fafafa;
+      border-color: #d4d4d8;
+    }
+
+    .content-area {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .input-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 14px 20px;
+      background: #fafafa;
+      border-bottom: 1px solid #f4f4f5;
+      font-size: 13px;
+      color: #52525b;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .drop-zone {
+      padding: 32px 20px;
+      text-align: center;
+      border-bottom: 1px solid #f4f4f5;
+      background: linear-gradient(180deg, #fafafa 0%, #ffffff 100%);
+      transition: var(--transition);
+    }
+
+    .drop-zone.dragover {
+      background: linear-gradient(180deg, rgba(99,102,241,0.05) 0%, rgba(168,85,247,0.05) 100%);
+      border-color: var(--primary);
+    }
+
+    .drop-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+
+    .drop-text {
+      color: #71717a;
+      font-size: 14px;
+    }
+
+    .drop-text strong {
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .drop-text strong:hover {
+      text-decoration: underline;
+    }
+
+    .input-area {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #markdown-input {
+      flex: 1;
+      border: none;
+      padding: 20px;
+      font-family: 'SF Mono', Monaco, Consolas, monospace;
+      font-size: 14px;
+      line-height: 1.7;
+      resize: none;
+      background: white;
+      color: #18181b;
+    }
+
+    #markdown-input:focus {
+      outline: none;
+    }
+
+    #markdown-input::placeholder {
+      color: #a1a1aa;
+    }
+
+    /* 预览区 */
+    .preview-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+    }
+
+    .preview-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      background: white;
+      min-height: 200px;
+    }
+
+    .preview-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .preview-content::-webkit-scrollbar-track {
+      background: #f4f4f5;
+    }
+
+    .preview-content::-webkit-scrollbar-thumb {
+      background: #d4d4d8;
+      border-radius: 4px;
+    }
+
+    .preview-content:empty::before {
+      content: '预览区域（可直接编辑）\A输入或拖入 Markdown 文件后，这里将显示转换后的效果';
+      white-space: pre-wrap;
+      color: #a1a1aa;
+      font-size: 14px;
+      display: block;
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    .preview-content:focus {
+      outline: none;
+      box-shadow: inset 0 0 0 2px var(--primary);
+    }
+
+    .edit-indicator {
+      font-size: 11px;
+      color: #f59e0b;
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      padding: 4px 10px;
+      border-radius: 20px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .edit-indicator.show {
+      display: inline-block;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-dark);
+      color: white;
+      padding: 14px 24px;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      font-size: 14px;
+      font-weight: 500;
+      backdrop-filter: blur(10px);
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+
+    #file-input {
+      display: none;
+    }
+
+    /* 小按钮样式 */
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    /* 页脚版权 */
+    .footer-credit {
+      text-align: center;
+      padding: 12px;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border-color);
+      margin-top: auto;
+    }
+
+    .footer-credit a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    /* 响应式调整 */
+    @media (max-width: 1200px) {
+      .content-area {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        left: -320px;
+        height: 100vh;
+        z-index: 100;
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- 左侧设置面板 -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-brand">
+          <div class="sidebar-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+              <path d="M4 6h16M4 12h10M4 18h13"/>
+            </svg>
+          </div>
+          <span class="sidebar-title">WePub</span>
+        </div>
+        <button class="sidebar-toggle" onclick="toggleSidebar()" title="收起/展开">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="sidebar-content">
+        <!-- 字数统计 -->
+        <div class="stats-panel">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-value" id="word-count">0</div>
+              <div class="stat-label">字数</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="char-count">0</div>
+              <div class="stat-label">字符</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="char-no-space">0</div>
+              <div class="stat-label">不含空格</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-value" id="para-count">0</div>
+              <div class="stat-label">段落</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 配色方案 -->
+        <div class="setting-group" id="group-presets">
+          <div class="setting-group-header" onclick="toggleGroup('group-presets')">
+            <span class="setting-group-title"><span>🎨</span> 配色方案</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="preset-grid" id="preset-grid"></div>
+            <div class="current-preset" id="current-preset">当前：默认蓝</div>
+          </div>
+        </div>
+
+        <!-- 标题颜色设置 -->
+        <div class="setting-group collapsed" id="group-heading-colors">
+          <div class="setting-group-header" onclick="toggleGroup('group-heading-colors')">
+            <span class="setting-group-title"><span>📌</span> 自定义标题色</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="setting-item">
+              <label class="setting-label">H1 一级标题</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="h1-color" value="#1d4ed8">
+                <input type="text" class="text-input" id="h1-color-text" value="#1d4ed8">
+              </div>
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">H2 二级标题</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="h2-color" value="#1d4ed8">
+                <input type="text" class="text-input" id="h2-color-text" value="#1d4ed8">
+              </div>
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">H3 三级标题</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="h3-color" value="#1d4ed8">
+                <input type="text" class="text-input" id="h3-color-text" value="#1d4ed8">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 文本颜色设置 -->
+        <div class="setting-group collapsed" id="group-text-colors">
+          <div class="setting-group-header" onclick="toggleGroup('group-text-colors')">
+            <span class="setting-group-title"><span>✏️</span> 自定义文本色</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="setting-item">
+              <label class="setting-label">正文颜色</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="text-color" value="#333333">
+                <input type="text" class="text-input" id="text-color-text" value="#333333">
+              </div>
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">加粗颜色</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="bold-color" value="#60a5fa">
+                <input type="text" class="text-input" id="bold-color-text" value="#60a5fa">
+              </div>
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">链接颜色</label>
+              <div class="setting-row">
+                <input type="color" class="color-input" id="link-color" value="#3b82f6">
+                <input type="text" class="text-input" id="link-color-text" value="#3b82f6">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 排版设置 -->
+        <div class="setting-group" id="group-typography">
+          <div class="setting-group-header" onclick="toggleGroup('group-typography')">
+            <span class="setting-group-title"><span>📐</span> 排版设置</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="setting-item">
+              <label class="setting-label">正文字号</label>
+              <input type="text" class="text-input" id="font-size" value="16px">
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">行高</label>
+              <input type="text" class="text-input" id="line-height" value="1.8">
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">段落间距</label>
+              <input type="text" class="text-input" id="para-margin" value="1.5em">
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">标题额外空行数</label>
+              <div class="setting-row">
+                <input type="number" class="text-input small" id="title-spacing" value="1" min="0" max="5">
+                <span style="font-size:11px;color:#94a3b8;">行（0=不添加）</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字符替换 -->
+        <div class="setting-group" id="group-replace">
+          <div class="setting-group-header" onclick="toggleGroup('group-replace')">
+            <span class="setting-group-title"><span>🔄</span> 字符替换</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="replace-list" id="replace-list"></div>
+            <div class="add-replace-btn" onclick="addReplaceRule()">+ 添加替换规则</div>
+          </div>
+        </div>
+
+        <!-- 列表样式 -->
+        <div class="setting-group" id="group-list-style">
+          <div class="setting-group-header" onclick="toggleGroup('group-list-style')">
+            <span class="setting-group-title"><span>📋</span> 列表样式</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="setting-item">
+              <label class="setting-label">无序列表标记</label>
+              <div class="list-style-options" id="ul-style-options">
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="none" checked> 无标记
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="disc"> • 实心圆
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="circle"> ○ 空心圆
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="square"> ■ 方块
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="dash"> — 短横
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ul-style" value="custom"> 自定义
+                </label>
+              </div>
+              <input type="text" class="text-input" id="ul-custom-marker" placeholder="自定义标记符号" value="•" style="margin-top:8px;display:none;">
+            </div>
+            <div class="setting-item">
+              <label class="setting-label">有序列表标记</label>
+              <div class="list-style-options" id="ol-style-options">
+                <label class="radio-label">
+                  <input type="radio" name="ol-style" value="none" checked> 无标记
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ol-style" value="number"> 1. 2. 3. 数字
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ol-style" value="chinese"> 一、二、三
+                </label>
+                <label class="radio-label">
+                  <input type="radio" name="ol-style" value="bracket"> (1) (2) (3)
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-group" id="group-features">
+          <div class="setting-group-header" onclick="toggleGroup('group-features')">
+            <span class="setting-group-title"><span>⚙️</span> 其他设置</span>
+            <span class="setting-group-toggle">▼</span>
+          </div>
+          <div class="setting-group-content">
+            <div class="setting-item">
+              <label class="checkbox-label">
+                <input type="checkbox" id="remove-images" checked>
+                移除图片语法
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <button class="reset-btn" onclick="resetSettings()">恢复默认设置</button>
+        <a href="guide.html" class="guide-link">📖 查看使用指南</a>
+
+        <div class="footer-credit">
+          Made with ❤️ by <a href="#">WePub</a>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-panel">
+      <header class="header">
+        <div class="header-brand">
+          <div class="header-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+              <path d="M4 6h16M4 12h10M4 18h13"/>
+            </svg>
+          </div>
+          <div>
+            <h1>WePub</h1>
+            <p class="header-tagline">专业的微信公众号排版工具</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-secondary" onclick="clearAll()">清空</button>
+          <button class="btn btn-primary" onclick="copyHTML()">📋 复制 HTML</button>
+          <button class="btn btn-success" onclick="downloadMD()">⬇️ 下载 MD</button>
+        </div>
+      </header>
+
+      <div class="content-area">
+        <!-- 输入区 -->
+        <section class="input-section">
+          <div class="section-header">
+            <span>Markdown 输入</span>
+          </div>
+          <div class="drop-zone" id="drop-zone">
+            <div class="drop-icon">📄</div>
+            <div class="drop-text">
+              拖拽 .md 文件到这里，或 <strong onclick="document.getElementById('file-input').click()">点击选择文件</strong>
+            </div>
+            <input type="file" id="file-input" accept=".md,.markdown,.txt" onchange="handleFileSelect(event)">
+          </div>
+          <div class="input-area">
+            <textarea id="markdown-input" placeholder="在这里粘贴或输入 Markdown 内容..."></textarea>
+          </div>
+        </section>
+
+        <!-- 预览区 -->
+        <section class="preview-section">
+          <div class="section-header">
+            <span>预览效果 <span class="edit-indicator" id="edit-indicator">已手动编辑</span></span>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-secondary btn-sm" onclick="resetPreview()">🔄 重新生成</button>
+              <button class="btn btn-primary btn-sm" onclick="copyHTML()">📋 复制全文</button>
+            </div>
+          </div>
+          <div class="preview-content" id="preview-content" contenteditable="true"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // 配色方案预设 - 10 套高区分度配色
+    const COLOR_PRESETS = [
+      {
+        name: '商务深蓝',
+        desc: '专业稳重，适合商务、金融、科技企业类文章',
+        h1Color: '#0A1F44', h2Color: '#1E3A5F', h3Color: '#2E5090',
+        boldColor: '#0D47A1', textColor: '#1A1A2E', linkColor: '#1565C0'
+      },
+      {
+        name: '热情红橙',
+        desc: '活力四射，适合营销、美食、生活类文章',
+        h1Color: '#B71C1C', h2Color: '#D84315', h3Color: '#E65100',
+        boldColor: '#C62828', textColor: '#2D1B14', linkColor: '#F4511E'
+      },
+      {
+        name: '自然森林',
+        desc: '清新自然，适合环保、健康、户外、教育类文章',
+        h1Color: '#1B5E20', h2Color: '#2E7D32', h3Color: '#388E3C',
+        boldColor: '#33691E', textColor: '#1C2418', linkColor: '#43A047'
+      },
+      {
+        name: '优雅紫罗兰',
+        desc: '高贵优雅，适合艺术、时尚、美妆、文化类文章',
+        h1Color: '#4A148C', h2Color: '#6A1B9A', h3Color: '#7B1FA2',
+        boldColor: '#5E35B1', textColor: '#1A1423', linkColor: '#8E24AA'
+      },
+      {
+        name: '科技青蓝',
+        desc: '未来感，适合科技、AI、互联网、创新类文章',
+        h1Color: '#006064', h2Color: '#00838F', h3Color: '#0097A7',
+        boldColor: '#00796B', textColor: '#0D1B1E', linkColor: '#00ACC1'
+      },
+      {
+        name: '中国红',
+        desc: '传统中式风格，红金配色，庄重典雅',
+        h1Color: '#C41E3A', h2Color: '#8B0000', h3Color: '#B8860B',
+        boldColor: '#DAA520', textColor: '#2C1810', linkColor: '#E60012'
+      },
+      {
+        name: '莫兰迪灰',
+        desc: '高级灰调配色，柔和优雅，低饱和度艺术美感',
+        h1Color: '#6B7B8C', h2Color: '#8E9AAB', h3Color: '#A4B0BE',
+        boldColor: '#5D6D7E', textColor: '#4A4A4A', linkColor: '#7B8D9E'
+      },
+      {
+        name: '日系清新',
+        desc: '粉蓝粉色系，温柔可爱，少女感日式小清新',
+        h1Color: '#FF6B9D', h2Color: '#7EC8E3', h3Color: '#FFB6C1',
+        boldColor: '#E75480', textColor: '#5A5A5A', linkColor: '#69B4FF'
+      },
+      {
+        name: '暗夜霓虹',
+        desc: '赛博朋克风格，霓虹亮色，科技感十足',
+        h1Color: '#FF00FF', h2Color: '#00FFFF', h3Color: '#FF6EC7',
+        boldColor: '#39FF14', textColor: '#2D2D2D', linkColor: '#FF4081'
+      },
+      {
+        name: '复古咖啡',
+        desc: '棕色系怀旧配色，温暖醇厚，复古质感',
+        h1Color: '#6F4E37', h2Color: '#8B4513', h3Color: '#A0522D',
+        boldColor: '#CD853F', textColor: '#3C2415', linkColor: '#D2691E'
+      }
+    ];
+
+    // 当前选中的预设
+    let currentPreset = '商务深蓝';
+
+    // 配置对象
+    let CONFIG = {
+      h1Color: '#0A1F44',
+      h2Color: '#1E3A5F',
+      h3Color: '#2E5090',
+      boldColor: '#0D47A1',
+      textColor: '#1A1A2E',
+      linkColor: '#1565C0',
+      fontSize: '16px',
+      lineHeight: '1.8',
+      paragraphMargin: '1.5em',
+      h1Size: '24px',
+      h2Size: '20px',
+      h3Size: '18px',
+      titleSpacing: 1,
+    };
+
+    // 替换规则 - 包含所有之前提到的
+    let replaceRules = [
+      { from: '「', to: '"' },
+      { from: '」', to: '"' },
+      { from: '『', to: '"' },
+      { from: '』', to: '"' },
+      { from: '*', to: '' },
+    ];
+
+    // 功能开关
+    let features = {
+      removeImages: true,
+      ulStyle: 'none',      // none, disc, circle, square, dash, custom
+      olStyle: 'none',      // none, number, chinese, bracket
+      ulCustomMarker: '•',
+    };
+
+    // 是否手动编辑过预览
+    let previewManuallyEdited = false;
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('markdown-input').addEventListener('input', debounce(convert, 300));
+
+      // 预览区编辑监听
+      document.getElementById('preview-content').addEventListener('input', () => {
+        previewManuallyEdited = true;
+        document.getElementById('edit-indicator').classList.add('show');
+      });
+
+      bindColorInputs();
+      bindSettingInputs();
+      setupDragDrop();
+      loadSettings();
+      renderReplaceRules();
+      renderPresets();
+    });
+
+    // 渲染配色预设
+    function renderPresets() {
+      const grid = document.getElementById('preset-grid');
+      grid.innerHTML = COLOR_PRESETS.map(preset => `
+        <div class="preset-item ${currentPreset === preset.name ? 'active' : ''}"
+             onclick="applyPreset('${preset.name}')">
+          <div class="preset-name">${preset.name}</div>
+          <div class="preset-colors">
+            <div class="preset-color-dot" style="background:${preset.h1Color};"></div>
+            <div class="preset-color-dot" style="background:${preset.h2Color};"></div>
+            <div class="preset-color-dot" style="background:${preset.boldColor};"></div>
+            <div class="preset-color-dot" style="background:${preset.textColor};"></div>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('current-preset').textContent = `当前：${currentPreset}`;
+    }
+
+    // 应用配色预设
+    function applyPreset(presetName) {
+      const preset = COLOR_PRESETS.find(p => p.name === presetName);
+      if (!preset) return;
+
+      currentPreset = presetName;
+
+      // 更新 CONFIG
+      CONFIG.h1Color = preset.h1Color;
+      CONFIG.h2Color = preset.h2Color;
+      CONFIG.h3Color = preset.h3Color;
+      CONFIG.boldColor = preset.boldColor;
+      CONFIG.textColor = preset.textColor;
+      CONFIG.linkColor = preset.linkColor;
+
+      // 更新 UI
+      document.getElementById('h1-color').value = preset.h1Color;
+      document.getElementById('h1-color-text').value = preset.h1Color;
+      document.getElementById('h2-color').value = preset.h2Color;
+      document.getElementById('h2-color-text').value = preset.h2Color;
+      document.getElementById('h3-color').value = preset.h3Color;
+      document.getElementById('h3-color-text').value = preset.h3Color;
+      document.getElementById('bold-color').value = preset.boldColor;
+      document.getElementById('bold-color-text').value = preset.boldColor;
+      document.getElementById('text-color').value = preset.textColor;
+      document.getElementById('text-color-text').value = preset.textColor;
+      document.getElementById('link-color').value = preset.linkColor;
+      document.getElementById('link-color-text').value = preset.linkColor;
+
+      renderPresets();
+      convert();
+      saveSettings();
+      showToast(`已应用「${presetName}」配色`, 'success');
+    }
+
+    function debounce(fn, delay) {
+      let timer;
+      return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+      };
+    }
+
+    // 绑定颜色输入
+    function bindColorInputs() {
+      const colorPairs = [
+        ['h1-color', 'h1-color-text', 'h1Color'],
+        ['h2-color', 'h2-color-text', 'h2Color'],
+        ['h3-color', 'h3-color-text', 'h3Color'],
+        ['bold-color', 'bold-color-text', 'boldColor'],
+        ['text-color', 'text-color-text', 'textColor'],
+        ['link-color', 'link-color-text', 'linkColor']
+      ];
+
+      colorPairs.forEach(([colorId, textId, configKey]) => {
+        const colorInput = document.getElementById(colorId);
+        const textInput = document.getElementById(textId);
+
+        colorInput.addEventListener('input', (e) => {
+          textInput.value = e.target.value;
+          CONFIG[configKey] = e.target.value;
+          markCustomPreset();
+          convert();
+          saveSettings();
+        });
+
+        textInput.addEventListener('input', (e) => {
+          if (/^#[0-9A-Fa-f]{6}$/.test(e.target.value)) {
+            colorInput.value = e.target.value;
+            CONFIG[configKey] = e.target.value;
+            markCustomPreset();
+            convert();
+            saveSettings();
+          }
+        });
+      });
+    }
+
+    // 标记为自定义配色
+    function markCustomPreset() {
+      currentPreset = '自定义';
+      renderPresets();
+    }
+
+    function bindSettingInputs() {
+      const settings = [
+        ['font-size', 'fontSize'],
+        ['line-height', 'lineHeight'],
+        ['para-margin', 'paragraphMargin']
+      ];
+
+      settings.forEach(([id, key]) => {
+        document.getElementById(id).addEventListener('input', (e) => {
+          CONFIG[key] = e.target.value;
+          convert();
+          saveSettings();
+        });
+      });
+
+      // 标题空行数
+      document.getElementById('title-spacing').addEventListener('input', (e) => {
+        CONFIG.titleSpacing = parseInt(e.target.value) || 0;
+        convert();
+        saveSettings();
+      });
+
+      // 功能开关
+      document.getElementById('remove-images').addEventListener('change', (e) => {
+        features.removeImages = e.target.checked;
+        convert();
+        saveSettings();
+      });
+
+      // 无序列表样式
+      document.querySelectorAll('input[name="ul-style"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          features.ulStyle = e.target.value;
+          const customInput = document.getElementById('ul-custom-marker');
+          customInput.style.display = e.target.value === 'custom' ? 'block' : 'none';
+          convert();
+          saveSettings();
+        });
+      });
+
+      // 无序列表自定义标记
+      document.getElementById('ul-custom-marker').addEventListener('input', (e) => {
+        features.ulCustomMarker = e.target.value || '•';
+        convert();
+        saveSettings();
+      });
+
+      // 有序列表样式
+      document.querySelectorAll('input[name="ol-style"]').forEach(radio => {
+        radio.addEventListener('change', (e) => {
+          features.olStyle = e.target.value;
+          convert();
+          saveSettings();
+        });
+      });
+    }
+
+    // 设置组折叠
+    function toggleGroup(groupId) {
+      const group = document.getElementById(groupId);
+      group.classList.toggle('collapsed');
+      saveSettings();
+    }
+
+    // 侧边栏折叠
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    // 拖拽设置
+    function setupDragDrop() {
+      const dropZone = document.getElementById('drop-zone');
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+        document.body.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+      });
+
+      dropZone.addEventListener('drop', handleDrop, false);
+    }
+
+    function handleDrop(e) {
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        readFile(files[0]);
+      }
+    }
+
+    function handleFileSelect(e) {
+      const file = e.target.files[0];
+      if (file) {
+        readFile(file);
+      }
+    }
+
+    function readFile(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById('markdown-input').value = e.target.result;
+        convert();
+        showToast('文件已加载', 'success');
+      };
+      reader.readAsText(file);
+    }
+
+    // 转换
+    function convert() {
+      const markdown = document.getElementById('markdown-input').value;
+      if (!markdown.trim()) {
+        document.getElementById('preview-content').innerHTML = '';
+        updateStats('');
+        previewManuallyEdited = false;
+        document.getElementById('edit-indicator').classList.remove('show');
+        return;
+      }
+
+      const html = convertMarkdownToWechat(markdown);
+      document.getElementById('preview-content').innerHTML = html;
+      updateStats(markdown);
+      previewManuallyEdited = false;
+      document.getElementById('edit-indicator').classList.remove('show');
+    }
+
+    // 重新生成预览
+    function resetPreview() {
+      convert();
+      showToast('已重新生成', 'success');
+    }
+
+    function convertMarkdownToWechat(markdown) {
+      let html = markdown;
+
+      // 1. 处理代码块
+      const codeBlocks = [];
+      html = html.replace(/```[\s\S]*?```/g, (match) => {
+        codeBlocks.push(match);
+        return `\x00CODEBLOCK${codeBlocks.length - 1}\x00`;
+      });
+
+      // 2. 处理行内代码
+      const inlineCodes = [];
+      html = html.replace(/`([^`]+)`/g, (match, code) => {
+        inlineCodes.push(code);
+        return `\x00INLINECODE${inlineCodes.length - 1}\x00`;
+      });
+
+      // 3. 处理图片
+      if (features.removeImages) {
+        html = html.replace(/!\[([^\]]*)\]\([^)]+\)/g, '');
+      }
+
+      // 4. 处理标题 - 使用各自的颜色
+      html = html.replace(/^### (.+)$/gm, (match, title) => {
+        return `<h3 style="color:${CONFIG.h3Color}; font-size:${CONFIG.h3Size}; font-weight:bold; margin:1.2em 0 0.8em 0; line-height:1.4;">${title.trim()}</h3>`;
+      });
+
+      html = html.replace(/^## (.+)$/gm, (match, title) => {
+        return `<h2 style="color:${CONFIG.h2Color}; font-size:${CONFIG.h2Size}; font-weight:bold; margin:1.5em 0 0.8em 0; line-height:1.4;">${title.trim()}</h2>`;
+      });
+
+      html = html.replace(/^# (.+)$/gm, (match, title) => {
+        return `<h1 style="color:${CONFIG.h1Color}; font-size:${CONFIG.h1Size}; font-weight:bold; margin:0 0 1em 0; line-height:1.4;">${title.trim()}</h1>`;
+      });
+
+      // 5. 处理加粗+斜体
+      html = html.replace(/\*\*\*(.+?)\*\*\*/g, `<strong style="color:${CONFIG.boldColor};"><em>$1</em></strong>`);
+      html = html.replace(/___(.+?)___/g, `<strong style="color:${CONFIG.boldColor};"><em>$1</em></strong>`);
+
+      // 6. 处理加粗
+      html = html.replace(/\*\*(.+?)\*\*/g, `<strong style="color:${CONFIG.boldColor};">$1</strong>`);
+      html = html.replace(/__(.+?)__/g, `<strong style="color:${CONFIG.boldColor};">$1</strong>`);
+
+      // 7. 处理斜体
+      html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>');
+      html = html.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
+
+      // 8. 处理链接
+      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+        `<a href="$2" style="color:${CONFIG.linkColor}; text-decoration:none;">$1</a>`);
+
+      // 9. 处理无序列表
+      const ulMarkers = {
+        'none': '',
+        'disc': '• ',
+        'circle': '○ ',
+        'square': '■ ',
+        'dash': '— ',
+        'custom': features.ulCustomMarker + ' '
+      };
+      const ulMarker = ulMarkers[features.ulStyle] || '';
+
+      html = html.replace(/^[-*+] (.+)$/gm, (match, item) => {
+        const prefix = ulMarker ? `<span style="color:${CONFIG.boldColor};">${ulMarker}</span>` : '';
+        return `<p style="color:${CONFIG.textColor}; font-size:${CONFIG.fontSize}; line-height:${CONFIG.lineHeight}; margin:0 0 0.8em 0; text-align:justify;">${prefix}${item.trim()}</p>`;
+      });
+
+      // 10. 处理有序列表
+      let olCounter = 0;
+      const chineseNumbers = ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
+
+      html = html.replace(/^(\d+)\. (.+)$/gm, (match, num, item) => {
+        olCounter++;
+        let prefix = '';
+
+        if (features.olStyle === 'number') {
+          prefix = `<span style="color:${CONFIG.boldColor};">${olCounter}. </span>`;
+        } else if (features.olStyle === 'chinese') {
+          const chNum = olCounter <= 10 ? chineseNumbers[olCounter - 1] : olCounter;
+          prefix = `<span style="color:${CONFIG.boldColor};">${chNum}、</span>`;
+        } else if (features.olStyle === 'bracket') {
+          prefix = `<span style="color:${CONFIG.boldColor};">(${olCounter}) </span>`;
+        }
+
+        return `<p style="color:${CONFIG.textColor}; font-size:${CONFIG.fontSize}; line-height:${CONFIG.lineHeight}; margin:0 0 0.8em 0; text-align:justify;">${prefix}${item.trim()}</p>`;
+      });
+
+      // 10. 处理引用
+      html = html.replace(/^> (.+)$/gm, (match, quote) => {
+        return `<blockquote style="border-left:4px solid ${CONFIG.h1Color}; padding-left:1em; margin:1em 0; color:#666; font-style:italic;">${quote.trim()}</blockquote>`;
+      });
+
+      // 11. 处理分割线
+      html = html.replace(/^[-*_]{3,}$/gm,
+        `<hr style="border:none; border-top:1px solid #e0e0e0; margin:2em 0;">`);
+
+      // 12. 恢复代码块
+      codeBlocks.forEach((block, i) => {
+        const code = block.replace(/```(\w*)\n?([\s\S]*?)```/, (m, lang, content) => {
+          return `<pre style="background:#f5f5f5; padding:1em; border-radius:4px; overflow-x:auto; font-family:Consolas,Monaco,monospace; font-size:14px; line-height:1.5; margin:1em 0;"><code>${escapeHtml(content.trim())}</code></pre>`;
+        });
+        html = html.replace(`\x00CODEBLOCK${i}\x00`, code);
+      });
+
+      // 13. 恢复行内代码
+      inlineCodes.forEach((code, i) => {
+        html = html.replace(`\x00INLINECODE${i}\x00`,
+          `<code style="background:#f5f5f5; padding:0.2em 0.4em; border-radius:3px; font-family:Consolas,Monaco,monospace; font-size:0.9em;">${escapeHtml(code)}</code>`);
+      });
+
+      // 14. 处理段落
+      const lines = html.split('\n');
+      const result = [];
+      let paragraph = [];
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+
+        if (!trimmed) {
+          if (paragraph.length > 0) {
+            result.push(wrapParagraph(paragraph.join('<br>')));
+            paragraph = [];
+          }
+          continue;
+        }
+
+        if (trimmed.startsWith('<h') ||
+            trimmed.startsWith('<p') ||
+            trimmed.startsWith('<ul') ||
+            trimmed.startsWith('<ol') ||
+            trimmed.startsWith('<li') ||
+            trimmed.startsWith('<blockquote') ||
+            trimmed.startsWith('<hr') ||
+            trimmed.startsWith('<pre') ||
+            trimmed.startsWith('</')) {
+          if (paragraph.length > 0) {
+            result.push(wrapParagraph(paragraph.join('<br>')));
+            paragraph = [];
+          }
+          result.push(trimmed);
+        } else {
+          paragraph.push(trimmed);
+        }
+      }
+
+      if (paragraph.length > 0) {
+        result.push(wrapParagraph(paragraph.join('<br>')));
+      }
+
+      let output = result.join('\n\n');
+
+      // 15. 字符替换
+      replaceRules.forEach(rule => {
+        if (rule.from) {
+          output = output.split(rule.from).join(rule.to);
+        }
+      });
+
+      // 16. 标题额外空行
+      if (CONFIG.titleSpacing > 0) {
+        const spacing = '\n'.repeat(CONFIG.titleSpacing);
+        output = output.replace(/(<h[1-3][^>]*>)/g, spacing + '$1');
+        output = output.replace(/(<\/h[1-3]>)/g, '$1' + spacing);
+      }
+
+      return output;
+    }
+
+    function wrapParagraph(text) {
+      if (!text.trim()) return '';
+      const blockTags = ['<h1', '<h2', '<h3', '<h4', '<h5', '<h6', '<ul', '<ol', '<li', '<blockquote', '<hr', '<pre', '<div', '<table'];
+      const trimmedText = text.trim();
+      for (const tag of blockTags) {
+        if (trimmedText.startsWith(tag)) return text;
+      }
+      return `<p style="color:${CONFIG.textColor}; font-size:${CONFIG.fontSize}; line-height:${CONFIG.lineHeight}; margin:0 0 ${CONFIG.paragraphMargin} 0; text-align:justify;">${text}</p>`;
+    }
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function updateStats(markdown) {
+      const plainText = markdown
+        .replace(/^#+\s+/gm, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/\*(.+?)\*/g, '$1')
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+        .replace(/[-*+] /gm, '')
+        .replace(/^\d+\. /gm, '')
+        .replace(/\n+/g, '\n')
+        .trim();
+
+      const charCount = plainText.length;
+      const charCountNoSpace = plainText.replace(/\s/g, '').length;
+      const chineseChars = (plainText.match(/[\u4e00-\u9fa5]/g) || []).length;
+      const englishWords = (plainText.match(/[a-zA-Z]+/g) || []).length;
+      const wordCount = chineseChars + englishWords;
+      const paraCount = markdown.split(/\n\s*\n/).filter(p => p.trim()).length;
+
+      document.getElementById('word-count').textContent = wordCount;
+      document.getElementById('char-count').textContent = charCount;
+      document.getElementById('char-no-space').textContent = charCountNoSpace;
+      document.getElementById('para-count').textContent = paraCount;
+    }
+
+    // 复制 HTML - 使用预览区内容（包括手动编辑后的）
+    function copyHTML() {
+      const preview = document.getElementById('preview-content');
+      if (!preview.innerHTML) {
+        showToast('没有内容可复制');
+        return;
+      }
+
+      const range = document.createRange();
+      range.selectNodeContents(preview);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+
+      try {
+        document.execCommand('copy');
+        showToast('已复制到剪贴板' + (previewManuallyEdited ? '（包含手动修改）' : ''), 'success');
+      } catch (err) {
+        showToast('复制失败');
+      }
+
+      selection.removeAllRanges();
+    }
+
+    // 下载 MD
+    function downloadMD() {
+      const markdown = document.getElementById('markdown-input').value;
+      if (!markdown) {
+        showToast('没有内容可下载');
+        return;
+      }
+
+      const blob = new Blob([markdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'article.md';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('下载完成', 'success');
+    }
+
+    function clearAll() {
+      document.getElementById('markdown-input').value = '';
+      document.getElementById('preview-content').innerHTML = '';
+      updateStats('');
+      previewManuallyEdited = false;
+      document.getElementById('edit-indicator').classList.remove('show');
+    }
+
+    // 替换规则管理
+    function addReplaceRule() {
+      const from = prompt('输入要替换的字符:');
+      if (from === null) return;
+      const to = prompt('替换为 (留空则删除):') || '';
+
+      replaceRules.push({ from, to });
+      renderReplaceRules();
+      convert();
+      saveSettings();
+    }
+
+    function removeReplace(index) {
+      replaceRules.splice(index, 1);
+      renderReplaceRules();
+      convert();
+      saveSettings();
+    }
+
+    function renderReplaceRules() {
+      const list = document.getElementById('replace-list');
+      list.innerHTML = replaceRules.map((rule, index) => `
+        <div class="replace-item">
+          <span class="replace-from">${escapeHtml(rule.from)}</span>
+          <span class="replace-arrow">→</span>
+          <span class="replace-to">${rule.to ? escapeHtml(rule.to) : '(删除)'}</span>
+          <button class="replace-delete" onclick="removeReplace(${index})">✕</button>
+        </div>
+      `).join('');
+    }
+
+    function resetSettings() {
+      CONFIG = {
+        h1Color: '#0A1F44',
+        h2Color: '#1E3A5F',
+        h3Color: '#2E5090',
+        boldColor: '#0D47A1',
+        textColor: '#1A1A2E',
+        linkColor: '#1565C0',
+        fontSize: '16px',
+        lineHeight: '1.8',
+        paragraphMargin: '1.5em',
+        h1Size: '24px',
+        h2Size: '20px',
+        h3Size: '18px',
+        titleSpacing: 1,
+      };
+
+      replaceRules = [
+        { from: '「', to: '"' },
+        { from: '」', to: '"' },
+        { from: '『', to: '"' },
+        { from: '』', to: '"' },
+        { from: '*', to: '' },
+      ];
+
+      features = {
+        removeImages: true,
+        ulStyle: 'none',
+        olStyle: 'none',
+        ulCustomMarker: '•',
+      };
+
+      currentPreset = '商务深蓝';
+
+      // 更新 UI
+      document.getElementById('h1-color').value = CONFIG.h1Color;
+      document.getElementById('h1-color-text').value = CONFIG.h1Color;
+      document.getElementById('h2-color').value = CONFIG.h2Color;
+      document.getElementById('h2-color-text').value = CONFIG.h2Color;
+      document.getElementById('h3-color').value = CONFIG.h3Color;
+      document.getElementById('h3-color-text').value = CONFIG.h3Color;
+      document.getElementById('bold-color').value = CONFIG.boldColor;
+      document.getElementById('bold-color-text').value = CONFIG.boldColor;
+      document.getElementById('text-color').value = CONFIG.textColor;
+      document.getElementById('text-color-text').value = CONFIG.textColor;
+      document.getElementById('link-color').value = CONFIG.linkColor;
+      document.getElementById('link-color-text').value = CONFIG.linkColor;
+      document.getElementById('font-size').value = CONFIG.fontSize;
+      document.getElementById('line-height').value = CONFIG.lineHeight;
+      document.getElementById('para-margin').value = CONFIG.paragraphMargin;
+      document.getElementById('title-spacing').value = CONFIG.titleSpacing;
+      document.getElementById('remove-images').checked = features.removeImages;
+
+      // 恢复列表样式选项
+      document.querySelector(`input[name="ul-style"][value="${features.ulStyle}"]`).checked = true;
+      document.querySelector(`input[name="ol-style"][value="${features.olStyle}"]`).checked = true;
+      document.getElementById('ul-custom-marker').value = features.ulCustomMarker;
+      document.getElementById('ul-custom-marker').style.display = features.ulStyle === 'custom' ? 'block' : 'none';
+
+      // 展开所有设置组
+      document.querySelectorAll('.setting-group').forEach(g => g.classList.remove('collapsed'));
+
+      renderReplaceRules();
+      renderPresets();
+      convert();
+      localStorage.removeItem('wechat-format-settings');
+      showToast('已恢复默认设置', 'success');
+    }
+
+    function saveSettings() {
+      const collapsedGroups = [];
+      document.querySelectorAll('.setting-group.collapsed').forEach(g => collapsedGroups.push(g.id));
+
+      const settings = { CONFIG, replaceRules, features, collapsedGroups, currentPreset };
+      localStorage.setItem('wechat-format-settings', JSON.stringify(settings));
+    }
+
+    function loadSettings() {
+      const saved = localStorage.getItem('wechat-format-settings');
+      if (saved) {
+        try {
+          const settings = JSON.parse(saved);
+          CONFIG = { ...CONFIG, ...settings.CONFIG };
+          replaceRules = settings.replaceRules || replaceRules;
+          features = { ...features, ...settings.features };
+          currentPreset = settings.currentPreset || '商务深蓝';
+
+          // 更新 UI
+          document.getElementById('h1-color').value = CONFIG.h1Color;
+          document.getElementById('h1-color-text').value = CONFIG.h1Color;
+          document.getElementById('h2-color').value = CONFIG.h2Color;
+          document.getElementById('h2-color-text').value = CONFIG.h2Color;
+          document.getElementById('h3-color').value = CONFIG.h3Color;
+          document.getElementById('h3-color-text').value = CONFIG.h3Color;
+          document.getElementById('bold-color').value = CONFIG.boldColor;
+          document.getElementById('bold-color-text').value = CONFIG.boldColor;
+          document.getElementById('text-color').value = CONFIG.textColor;
+          document.getElementById('text-color-text').value = CONFIG.textColor;
+          document.getElementById('link-color').value = CONFIG.linkColor;
+          document.getElementById('link-color-text').value = CONFIG.linkColor;
+          document.getElementById('font-size').value = CONFIG.fontSize;
+          document.getElementById('line-height').value = CONFIG.lineHeight;
+          document.getElementById('para-margin').value = CONFIG.paragraphMargin;
+          document.getElementById('title-spacing').value = CONFIG.titleSpacing;
+          document.getElementById('remove-images').checked = features.removeImages;
+
+          // 恢复列表样式选项
+          const ulStyleRadio = document.querySelector(`input[name="ul-style"][value="${features.ulStyle}"]`);
+          if (ulStyleRadio) ulStyleRadio.checked = true;
+          const olStyleRadio = document.querySelector(`input[name="ol-style"][value="${features.olStyle}"]`);
+          if (olStyleRadio) olStyleRadio.checked = true;
+          document.getElementById('ul-custom-marker').value = features.ulCustomMarker || '•';
+          document.getElementById('ul-custom-marker').style.display = features.ulStyle === 'custom' ? 'block' : 'none';
+
+          // 恢复折叠状态
+          if (settings.collapsedGroups) {
+            settings.collapsedGroups.forEach(id => {
+              const group = document.getElementById(id);
+              if (group) group.classList.add('collapsed');
+            });
+          }
+
+          renderReplaceRules();
+        } catch (e) {
+          console.error('Failed to load settings:', e);
+        }
+      }
+    }
+
+    function showToast(message, type = '') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = 'toast show' + (type ? ' ' + type : '');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
