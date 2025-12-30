@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-WePub is a **WeChat Official Account formatting tool** that converts Markdown to WeChat-friendly HTML. It includes both a web-based editor (index.html) and a Node.js CLI tool (format-wechat.js).
+公众号排版大师 (WeChat Layout Master) is a **WeChat Official Account formatting tool** that converts Markdown to WeChat-friendly HTML. It includes both a web-based editor (index.html) and a Node.js CLI tool (format-wechat.js).
 
 ## Project Structure
 

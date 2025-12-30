@@ -1,4 +1,4 @@
-# WePub
+# 公众号排版大师
 
 [English](#english) | [中文](#中文)
 
@@ -8,7 +8,7 @@
 
 ### 简介
 
-WePub 是一款专为微信公众号设计的在线排版工具。通过简洁直观的界面，帮助内容创作者快速将 Markdown 文本转换为精美的公众号文章格式。
+公众号排版大师是一款专为微信公众号设计的在线排版工具。通过简洁直观的界面，帮助内容创作者快速将 Markdown 文本转换为精美的公众号文章格式。
 
 ### 功能特性
 
@@ -63,7 +63,7 @@ node format-wechat.js <文件.md> --preview
 
 ### Introduction
 
-WePub is an online formatting tool designed specifically for WeChat Official Accounts. With a clean and intuitive interface, it helps content creators quickly convert Markdown text into beautifully formatted articles.
+公众号排版大师 (WeChat Layout Master) is an online formatting tool designed specifically for WeChat Official Accounts. With a clean and intuitive interface, it helps content creators quickly convert Markdown text into beautifully formatted articles.
 
 ### Features
 

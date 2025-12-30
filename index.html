@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WePub - 微信公众号排版工具 | 专业文章排版神器</title>
+  <title>公众号排版大师 - 微信公众号排版工具 | 专业文章排版神器</title>
 
   <!-- SEO Meta Tags -->
-  <meta name="description" content="WePub 是一款专业的微信公众号排版工具，支持 Markdown 转换、10 套高区分度配色方案、实时预览编辑。一键复制，让你的公众号文章更专业、更美观。">
-  <meta name="keywords" content="微信公众号排版,Markdown转换,公众号编辑器,文章排版工具,WeChat排版,WePub">
-  <meta name="author" content="WePub">
+  <meta name="description" content="公众号排版大师是一款专业的微信公众号排版工具，支持 Markdown 转换、10 套高区分度配色方案、实时预览编辑。一键复制，让你的公众号文章更专业、更美观。">
+  <meta name="keywords" content="微信公众号排版,Markdown转换,公众号编辑器,文章排版工具,WeChat排版,公众号排版大师">
+  <meta name="author" content="公众号排版大师">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://wepub.app/">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://wepub.app/">
-  <meta property="og:title" content="WePub - 微信公众号排版工具">
+  <meta property="og:title" content="公众号排版大师 - 微信公众号排版工具">
   <meta property="og:description" content="专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览。让你的公众号文章更专业。">
   <meta property="og:image" content="https://wepub.app/og-image.png">
   <meta property="og:locale" content="zh_CN">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="WePub - 微信公众号排版工具">
+  <meta name="twitter:title" content="公众号排版大师 - 微信公众号排版工具">
   <meta name="twitter:description" content="专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览。">
   <meta name="twitter:image" content="https://wepub.app/og-image.png">
 
@@ -39,7 +39,7 @@
   {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    "name": "WePub",
+    "name": "公众号排版大师",
     "description": "专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览编辑",
     "url": "https://wepub.app",
     "applicationCategory": "UtilitiesApplication",
@@ -896,6 +896,19 @@
       text-decoration: none;
     }
 
+    .footer-disclaimer {
+      padding: 8px 12px;
+      font-size: 10px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.4;
+      opacity: 0.7;
+    }
+
+    .footer-disclaimer p {
+      margin: 0;
+    }
+
     /* 响应式调整 */
     @media (max-width: 1200px) {
       .content-area {
@@ -1179,7 +1192,11 @@
         <a href="guide.html" class="guide-link">📖 查看使用指南</a>
 
         <div class="footer-credit">
-          Made with ❤️ by <a href="#">WePub</a>
+          Made with ❤️ by <a href="#">公众号排版大师</a>
+        </div>
+
+        <div class="footer-disclaimer">
+          <p>免责声明：本工具仅供学习交流使用，与微信/腾讯无关。请勿用于违规内容。使用前请备份您的内容。</p>
         </div>
       </div>
     </aside>
@@ -1204,7 +1221,7 @@
             </svg>
           </div>
           <div>
-            <h1>WePub</h1>
+            <h1>公众号排版大师</h1>
             <p class="header-tagline">专业的微信公众号排版工具</p>
           </div>
         </div>
@@ -1371,6 +1388,16 @@
       loadSettings();
       renderReplaceRules();
       renderPresets();
+    });
+
+    // 页面关闭提醒，防止数据丢失
+    window.addEventListener('beforeunload', (e) => {
+      const input = document.getElementById('markdown-input');
+      if (input && input.value.trim()) {
+        e.preventDefault();
+        e.returnValue = '';
+        return '';
+      }
     });
 
     // 渲染配色预设
@@ -1627,12 +1654,32 @@
       }
     }
 
+    // 文件大小限制：1MB
+    const MAX_FILE_SIZE = 1 * 1024 * 1024;
+
     function readFile(file) {
+      // 检查文件大小
+      if (file.size > MAX_FILE_SIZE) {
+        showToast('文件过大，最大支持 1MB', 'error');
+        return;
+      }
+
+      // 检查文件类型
+      const validTypes = ['.md', '.markdown', '.txt'];
+      const fileName = file.name.toLowerCase();
+      if (!validTypes.some(ext => fileName.endsWith(ext))) {
+        showToast('不支持的文件类型，请上传 .md, .markdown 或 .txt 文件', 'error');
+        return;
+      }
+
       const reader = new FileReader();
       reader.onload = (e) => {
         document.getElementById('markdown-input').value = e.target.result;
         convert();
         showToast('文件已加载', 'success');
+      };
+      reader.onerror = () => {
+        showToast('文件读取失败，请重试', 'error');
       };
       reader.readAsText(file);
     }
@@ -1704,9 +1751,9 @@
       html = html.replace(/\*\*(.+?)\*\*/g, `<strong style="color:${CONFIG.boldColor};">$1</strong>`);
       html = html.replace(/__(.+?)__/g, `<strong style="color:${CONFIG.boldColor};">$1</strong>`);
 
-      // 7. 处理斜体
-      html = html.replace(/(?<!\*)\*([^*\n]+?)\*(?!\*)/g, '<em>$1</em>');
-      html = html.replace(/(?<!_)_([^_\n]+?)_(?!_)/g, '<em>$1</em>');
+      // 7. 处理斜体 (Safari-compatible: no lookbehind needed since ** and __ already processed)
+      html = html.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+      html = html.replace(/_([^_\n]+?)_/g, '<em>$1</em>');
 
       // 8. 处理链接 (with XSS protection)
       html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, text, url) => {
