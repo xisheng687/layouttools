@@ -26,8 +26,8 @@
   <meta name="twitter:description" content="专业的微信公众号排版工具，支持 Markdown 转换、精选配色方案、实时预览。">
   <meta name="twitter:image" content="https://wepub.app/og-image.png">
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%236366f1'/%3E%3Cstop offset='100%25' style='stop-color:%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='8' fill='url(%23g)'/%3E%3Cpath d='M8 10h16M8 16h12M8 22h14' stroke='white' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E">
+  <!-- Favicon - Apple-style squircle -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%237c3aed'/%3E%3Cstop offset='100%25' style='stop-color:%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='32' height='32' rx='7' fill='url(%23g)'/%3E%3Crect x='6' y='4' width='20' height='24' rx='3' fill='white' fill-opacity='0.15'/%3E%3Crect x='9' y='8' width='10' height='2.5' rx='1.25' fill='white'/%3E%3Crect x='9' y='13' width='14' height='2' rx='1' fill='white' fill-opacity='0.8'/%3E%3Crect x='9' y='18' width='14' height='2' rx='1' fill='white' fill-opacity='0.6'/%3E%3Crect x='9' y='23' width='8' height='2' rx='1' fill='white' fill-opacity='0.4'/%3E%3C/svg%3E">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -134,51 +134,36 @@
     }
 
     .sidebar-header {
-      padding: 20px;
+      padding: 16px 20px;
       background: var(--bg-dark);
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      gap: 12px;
       position: sticky;
       top: 0;
       z-index: 10;
       border-bottom: 1px solid var(--border-color);
     }
 
-    .sidebar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
+    .sidebar-header-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
     }
 
-    .sidebar-logo {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius-sm);
-      background: var(--gradient-primary);
-      display: flex;
-      align-items: center;
+    .sidebar.collapsed .sidebar-header {
+      padding: 12px;
       justify-content: center;
-      box-shadow: var(--shadow-glow);
     }
 
-    .sidebar-logo svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    .sidebar-title {
-      font-size: 18px;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .sidebar.collapsed .sidebar-brand .sidebar-title {
+    .sidebar.collapsed .sidebar-header-title {
       display: none;
+    }
+
+    .sidebar.collapsed .sidebar-toggle svg {
+      transform: rotate(180deg);
     }
 
     .sidebar-toggle {
@@ -186,18 +171,23 @@
       border: 1px solid var(--border-color);
       color: var(--text-secondary);
       cursor: pointer;
-      padding: 8px;
+      padding: 10px;
       border-radius: var(--radius-sm);
-      font-size: 14px;
       transition: var(--transition);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
     .sidebar-toggle:hover {
       background: var(--bg-hover);
       color: var(--text-primary);
+      border-color: var(--primary);
+    }
+
+    .sidebar-toggle svg {
+      transition: transform 0.3s ease;
     }
 
     .sidebar-content {
@@ -619,19 +609,21 @@
     }
 
     .header-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius-md);
-      background: var(--gradient-primary);
+      width: 44px;
+      height: 44px;
+      border-radius: 11px; /* iOS-style squircle ratio */
+      background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: var(--shadow-md), var(--shadow-glow);
+      box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3),
+                  0 4px 16px rgba(168, 85, 247, 0.2);
+      flex-shrink: 0;
     }
 
     .header-logo svg {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
     }
 
     .header h1 {
@@ -970,19 +962,13 @@
     <!-- 左侧设置面板 -->
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-brand">
-          <div class="sidebar-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-              <path d="M4 6h16M4 12h10M4 18h13"/>
-            </svg>
-          </div>
-          <span class="sidebar-title">WePub</span>
-        </div>
         <button class="sidebar-toggle" onclick="toggleSidebar()" title="收起/展开">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M15 18l-6-6 6-6"/>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M11 19l-7-7 7-7"/>
+            <path d="M4 12h16"/>
           </svg>
         </button>
+        <span class="sidebar-header-title">设置</span>
       </div>
 
       <div class="sidebar-content">
@@ -1208,8 +1194,13 @@
             </svg>
           </button>
           <div class="header-logo">
-            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
-              <path d="M4 6h16M4 12h10M4 18h13"/>
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- 简洁的文档排版图标 -->
+              <rect x="6" y="4" width="20" height="24" rx="3" fill="white" fill-opacity="0.15"/>
+              <rect x="9" y="8" width="10" height="2.5" rx="1.25" fill="white"/>
+              <rect x="9" y="13" width="14" height="2" rx="1" fill="white" fill-opacity="0.8"/>
+              <rect x="9" y="18" width="14" height="2" rx="1" fill="white" fill-opacity="0.6"/>
+              <rect x="9" y="23" width="8" height="2" rx="1" fill="white" fill-opacity="0.4"/>
             </svg>
           </div>
           <div>
