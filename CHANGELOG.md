@@ -5,6 +5,20 @@ All notable changes to WePub will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-01-13
+
+### Changed
+- Refactored typography settings UI to use Grid layout with radio buttons for better usability.
+- Updated default image compression level to "Standard (70%)".
+- Enhanced Rich Text input to be read-only (allows paste/copy only) to prevent direct editing issues.
+- Changed "Apply Changes" interaction: settings changes now require explicit confirmation to update preview.
+
+### Fixed
+- Rewrote `updateRichtextPreview` engine using DOM operations to ensure robust style application for complex HTML.
+- Fixed `initRichtextPaste` event listener duplicate binding issue.
+- Fixed "Title Spacing" (标题空行) calculation to correctly apply extra margin.
+- Fixed "Apply Changes" button logic and resolved JavaScript errors during preview update.
+
 ## [1.0.0] - 2025-01-01
 
 ### Added
